@@ -23,7 +23,7 @@ SCPPORT=-P 8820
 jaricompilemin:
 	-@ssh $(PORT) $(MACHINE) 'cd /tmp; rm *.txt *.md *.xml'
 	scp $(SCPPORT) draft-arkko-iab-data-minimization-principle.md \
-		$(OLDMINI) \
+		history/$(OLDMINI) \
 		$(MACHINE):/tmp
 	ssh $(PORT) $(MACHINE) 'cd /tmp; cat draft-arkko-iab-data-minimization-principle.md  | kramdown-rfc2629 | lib/add-note.py > draft-arkko-iab-data-minimization-principle-pre.xml'
 	ssh $(PORT) $(MACHINE) 'cd /tmp; xml2rfc -q --cache=/home/jar/.cache/xml2rfc $(VERSOPT) draft-arkko-iab-data-minimization-principle-pre.xml; cp draft-arkko-iab-data-minimization-principle-pre.txt draft-arkko-iab-data-minimization-principle.txt'
@@ -31,7 +31,6 @@ jaricompilemin:
 	ssh $(PORT) $(MACHINE) 'cd /tmp; rfcdiff $(OLDMINI) draft-arkko-iab-data-minimization-principle.txt'
 	scp $(SCPPORT) $(MACHINE):/tmp/draft-arkko-iab-data-minimization-principle-pre.xml \
 		./draft-arkko-iab-data-minimization-principle.xml
-	scp $(SCPPORT) $(MACHINE):/tmp/draft-arkko-iab-data-minimization-principle.txt \
-		$(MACHINE):/tmp/draft-arkko-iab-data-minimization-principle-from--$(OLDMINIREV).diff.html \
-		.
-	scp draft-*-data-minimization-*.txt draft-*-data-minimization-*.html root@cloud3.arkko.eu:/var/www/www.arkko.com/html/ietf/iab
+	scp $(SCPPORT) $(MACHINE):/tmp/draft-arkko-iab-data-minimization-principle.txt .
+	scp $(SCPPORT) $(MACHINE):/tmp/draft-arkko-iab-data-minimization-principle-from--$(OLDMINIREV).diff.html history
+	scp draft-*-data-minimization-*.txt history/draft-*-data-minimization-*.html root@cloud3.arkko.eu:/var/www/www.arkko.com/html/ietf/iab
