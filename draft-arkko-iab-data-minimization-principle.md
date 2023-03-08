@@ -2,7 +2,7 @@
 title: "Data minimization"
 abbrev: Data Minimization in Internet Architecture
 docname: draft-arkko-iab-data-minimization-principle
-date: July 2022
+date: October 2022
 category: info
 
 ipr: trust200902
@@ -26,6 +26,7 @@ normative:
 
 informative:
   RFC3552: 
+  RFC6973: 
   RFC7258: 
   RFC7858:
   RFC8546:
@@ -84,16 +85,17 @@ informative:
 Communications security has been at the center of many security
 improvements in the Internet. The goal has been to ensure that
 communications are protected against outside observers and
-attackers. This document recommends that this is no longer alone sufficient
-to cater for the security and privacy issues seen on the Internet
-today. For instance, it is often also necessary to protect against
-endpoints that are compromised, malicious, or whose interests simply
-do not align with the interests of users. While such protection is
-difficult, there are some measures that can be taken. It is important
-to consider the role of data passed to various parties -- including
-the primary protocol participants -- and balance the information given
-to them considering their roles and possible compromise of the
-information.
+attackers. Privacy has also been a key focus area, and understanding
+the privacy implications of new Internet technology is
+an important factor when IETF works on such technologies.
+
+This document highlights the need for a particular focus with respect
+to privacy. It is necessary to protect against endpoints that are
+compromised, malicious, or whose interests simply do not align with
+the interests of users. It is important to consider the role of data
+passed to various parties -- including the primary protocol
+participants -- and balance the information given to them considering
+their roles and possible compromise of the information.
 
 --- middle
 
@@ -112,21 +114,42 @@ very successful. Advances in protecting most of our communications
 with strong cryptographic has resulted in much improved security. Work on
 these advances continues to be a key part of IETF's security effort.
 
-This document recommends that further action is needed, however. For
-instance, the possibility that endpoints are compromised, malicious,
-or have interests that do not align with the interests of users. Given
-the advances in communication seceurity, adversaries have had to
-increase their pressure against new avenues of attack. New adversaries
-and risks have also arisen, e.g., due to increasing amount of
-information stored in various Internet services.
+Privacy has also been at the center of many activities in the IETF.
+Improvements in communications security obviously have improved
+privacy as well, but the concept is broader.  Privacy and its impact
+on protocol development activities at IETF is discussed in
+{{RFC6973}}, covering a number of topics, from understanding
+privacy threats to threat mitigation, including data minimization.
 
-While such protection is difficult, there are some measures that can
-be taken. This document focuses on the specific question of data
-passed to various parties -- including the primary protocol
-participants. What information is given to any other party should
-depend on the role of that party. And the possibility of a compromised
-entity sharing the information beyond the users' expectations should be
-kept in mind.
+This document highlights the need for a particular focus with respect
+to privacy, on data collection, particularly when it comes to the
+primary protocol participants (and not just observers/attackers).
+As RFC 6973 states:
+
+       "Limiting the data collected by protocol elements to
+        only what is necessary (collection limitation) is 
+        the most straightforward way to help reduce privacy
+        risks associated with the use of the protocol."
+
+This document offers some further discussion and motivation for
+this. This document suggests that limiting the sharing of data to the
+protocol participants is a key technique in limiting the data
+collection mentioned above. This document also suggests that what
+information is given to any other participant should depend on the
+role of that participant.
+
+The reason why this is important is that it is possible that endpoints
+are compromised, malicious, or have interests that do not align with
+the interests of users. Even closed, managed networks may have
+compromised nodes, justifying careful consideration of what
+information is provided to different nodes in the network.  And in all
+networks, increased use of communication security means adversaries
+may resort to new avenues of attack. New adversaries and risks have
+also arisen, e.g., due to increasing amount of information stored in
+various Internet services. And in situations where interests do not
+align across the protocol participants, limiting data collection by a
+protocol participant itself - who is interested in data collection - may
+not be sufficient.
 
 Careful control of information is also useful for technology
 evolution. For instance, allowing a party to unnecessarily collect or
@@ -141,53 +164,48 @@ to change what information is provided or how it is provided.
 
 The Principle of Least Privilege {{PoLP}} is applicable:
 
-    "Every program and every user of the system should operate 
-     using the least set of privileges necessary to complete the
-     job."
+      "Every program and every user of the system should operate 
+       using the least set of privileges necessary to complete the
+       job."
 
 In this context, it is recommended that the protocol participants
 minimize the information they share. I.e., they should provide only
 the information to each other that is necessary for the function that
 is expected to be performed by the other party.
 
-This recommendation is of course very similar to the current approach
-to communications security. As with communication security, we try to
-avoid providing too much information as it may be misused or leak
-through attacks. The same principle applies not just to routers and
-potential attackers on path, but also many other services in the
-Internet, including servers that provide some function.
+Information sharing may relate to different types of protocol
+exchanges, e.g., interaction of an endpoint with the network or with
+intermediaries. Other documents address aspects related to networks
+({{RFC8546}}, {{RFC8558}},
+{{I-D.iab-path-signals-collaboration}}). Thomson {{I-D.thomson-tmi}}
+discusses the role intermediaries. Communications security largely
+addresses observers and outsider adversaries, and {{RFC6973}}
+discusses associated traffic analysis threats. The focus in this
+document is on the primary protocol participants, such as a server in
+a client-server architecture or a service enables some kind of
+interaction among groups of users.
+
+As with communication security, we try to avoid providing too much
+information as it may be misused or leak through attacks. The same
+principle applies not just to routers and potential attackers on path,
+but also many other services in the Internet, including servers that
+provide some function.
 
 Of course, participants may provide more information to each after
 careful consideration, e.g., information provided in exchange of
 some benefit, or to parties that are trusted by the participant.
 
-# Discussion {#disc}
+## Types of information
 
-Information sharing may relate to different types of protocol exchanges:
+The use of identifiers has been extensively discussed in {{RFC6973}},
 
-* The interaction of an endpoint with the network, e.g., information
-  they provide in any network attachment process or the wire images of
-  the packets sent via the network.
-
-* The interaction of an endpoint with intermediaries such as group
-  messaging servers or NAT traversal relays.
-
-* The interaction of an endpoint with a service, such as a website,
-  social networking function, or a telemetry collection point.
-
-* End-to-end interactions between users, represented by applications
-  running on their computers.
-
-Information sharing need not be explicitly carried information, e.g., a
-data item in a message sent to a protocol participant. Indirectly
-inferred information can also end up being shared, such as message arrival times or
-patterns in the traffic flow. Information may also be obtained from
-fingerprinting the protocol participants, in an effort to identify
-unique endpoints or users.
-
-Information may also be combined from multiple sources, e.g., websites
-and social media systems collaborating to identify visiting users
-{{WP2021}}.
+Note that indirectly inferred information can also end up being
+shared, such as message arrival times or patterns in the traffic flow
+({{RFC6973}}). Information may also be obtained from fingerprinting
+the protocol participants, in an effort to identify unique endpoints
+or users ({{RFC6973}}). Information may also be combined from multiple
+sources, e.g., websites and social media systems collaborating to
+identify visiting users {{WP2021}}.
 
 ## Dealing with compromise
 
@@ -232,6 +250,24 @@ one aspect of this.
 
 ## Related work {#related}
 
+Cooper et al.  {{RFC6973}} discuss the general concept of privacy,
+including data minimization. They provide the general statement quoted
+in {{introduction}}, which is exactly about what this document is
+about. However, this document attempts to go further than the general
+statement, suggesting that information should not even be shared with
+a participant if it is not necessary for the expected role of that
+participant.
+
+{{RFC6973}} further discuss identifiability, i.e., the use of various
+types of identifiers. {{RFC6973}} also provides a questionnaire that
+protocol designers can use to further analyse the impact of their
+design.  For data minimization the questions relate to identifiers,
+data, observers, and fingerprinting. This includes, for instance,
+asking what information is exposed to which protocol entities, and if
+there are ways to limit such exposure. These questions are in line
+with avoiding sharing information to a protocol participant unless it
+is needed for its role.
+
 Hardie {{RFC8558}} discusses path signals, i.e., messages to or from
 on-path elements to endpoints. In the past, path signals were often
 implicit, e.g., network nodes interpreting in a particular way
@@ -264,21 +300,17 @@ other indirect information). The issues are largely the same even for
 participants. Even proper protocol participants may start to use
 information available to them, regardless of whether it was intended
 to that participant or simply relayed through them.
-   
 
 # Acknowledgements {#ack}
 
-The author would like to thank the members of the IAB, and the
-participants of IETF SAAG WG, Model-T IAB program, and the 2019 IAB
-DEDR workshop that all discussed some aspects of these issues. The
-author would like to acknowledge the significant
-contributions of Martin Thomson, Stephen Farrell, Mark McFadden, John
-Mattsson, Chris
-Wood, Dominique Lazanski, Eric Rescorla, Russ Housley, Robin Wilton,
-Mirja Kuehlewind, Tommy Pauly, Jaime Jiménez and Christian Huitema in
-discussions around this general problem area.
+The author would like to thank the participants of various IAB
+workshops and programs, and IETF discussion list contributors for
+interesting discussions in this area.  The author would in particular
+like to acknowledge the significant contributions of Martin Thomson,
+Nick Doty, Stephen Farrell, Mark McFadden, John Mattsson, Chris Wood,
+Dominique Lazanski, Eric Rescorla, Russ Housley, Robin Wilton, Mirja
+Kuehlewind, Tommy Pauly, Jaime Jiménez and Christian Huitema.
 
-This work has been influenced greatly by discussions about trends in
-attacks, for instance, in {{RFC8980}}, {{I-D.farrell-etm}}
-{{I-D.arkko-arch-internet-threat-model-guidance}},
-{{I-D.lazanski-smart-users-internet}}, and others.
+This work has been influenced by {{RFC6973}}, {{RFC8980}},
+{{I-D.farrell-etm}} {{I-D.arkko-arch-internet-threat-model-guidance}},
+{{I-D.lazanski-smart-users-internet}},
