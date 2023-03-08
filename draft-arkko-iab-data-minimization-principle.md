@@ -2,7 +2,7 @@
 title: "Data minimization"
 abbrev: Data Minimization in Internet Architecture
 docname: draft-arkko-iab-data-minimization-principle
-date: October 2022
+date: March 2023
 category: info
 
 ipr: trust200902
@@ -23,17 +23,21 @@ author:
 
 normative:
 
-
 informative:
   RFC3552: 
   RFC6973: 
-  RFC7258: 
+  RFC7258:
+  RFC7816:
+  RFC7819:
+  RFC7824:
+  RFC7844: 
   RFC7858:
   RFC8546:
   RFC8484:
   RFC8558:
   RFC8980:
   RFC9000: 
+  RFC9076:
   I-D.farrell-etm:
   I-D.arkko-arch-internet-threat-model-guidance:
   I-D.lazanski-smart-users-internet:
@@ -258,6 +262,14 @@ statement, suggesting that information should not even be shared with
 a participant if it is not necessary for the expected role of that
 participant.
 
+Specifically, {{RFC6973}} says "Limiting the data
+collected by protocol elements to only what is necessary (collection
+limitation)". But when there are potentially conflicting interests
+among the protocol participants, expecting a participant to limit
+its data collection itself seems insufficient. What we need to do is
+to not even give that that participant the information. Interviewing
+the authors of the RFC, this what the intent of the text was, but the text isn't explicit about it.
+
 {{RFC6973}} further discuss identifiability, i.e., the use of various
 types of identifiers. {{RFC6973}} also provides a questionnaire that
 protocol designers can use to further analyse the impact of their
@@ -267,6 +279,15 @@ asking what information is exposed to which protocol entities, and if
 there are ways to limit such exposure. These questions are in line
 with avoiding sharing information to a protocol participant unless it
 is needed for its role.
+
+In the years after publishing {{RFC6973}} there has also been a number
+of documents on specific issues, such as one DNS Query Name
+Minimization {{RFC7816}}, general DNS privacy advice including data
+minimization {{RFC9076}}, advice for DHCP clients for minimizing
+information in requests they send to DHCP servers {{RFC7844}} (along
+with general privacy considerations of DHCP {{RFC7819}}
+{{RFC7824}}). These are on the topic of limiting information sent by
+one primary protocol particiant (client) to another (server).
 
 Hardie {{RFC8558}} discusses path signals, i.e., messages to or from
 on-path elements to endpoints. In the past, path signals were often
@@ -307,9 +328,10 @@ The author would like to thank the participants of various IAB
 workshops and programs, and IETF discussion list contributors for
 interesting discussions in this area.  The author would in particular
 like to acknowledge the significant contributions of Martin Thomson,
-Nick Doty, Stephen Farrell, Mark McFadden, John Mattsson, Chris Wood,
-Dominique Lazanski, Eric Rescorla, Russ Housley, Robin Wilton, Mirja
-Kuehlewind, Tommy Pauly, Jaime Jiménez and Christian Huitema.
+Nick Doty, Alissa Cooper, Stephen Farrell, Mark McFadden, John
+Mattsson, Chris Wood, Dominique Lazanski, Eric Rescorla, Russ Housley,
+Robin Wilton, Mirja Kuehlewind, Tommy Pauly, Jaime Jiménez and
+Christian Huitema.
 
 This work has been influenced by {{RFC6973}}, {{RFC8980}},
 {{I-D.farrell-etm}} {{I-D.arkko-arch-internet-threat-model-guidance}},
